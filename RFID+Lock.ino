@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
+//need to change for ESP32 board; for now it's arduino uno
 #define SS_PIN 10
 #define RST_PIN 9
 #define LED_G 5 //green LED pin
@@ -9,7 +10,11 @@
 #define BUZZER 2 //buzzer pin
 #define ACCESS_DELAY 500
 #define DENIED_DELAY 1000
+#define OPEN_DELAY 5000
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance.
+
+//reset function
+void (*resetFunc)(void) = 0;
 
 void setup() {
   Serial.begin(9600);   
@@ -59,11 +64,14 @@ void loop() {
     digitalWrite(LED_G, HIGH);
     tone(BUZZER, 330);
     delay(ACCESS_DELAY);
-    //need to change here later for the lock 
-    //for now it locks back after 0.5 sec following LED and buzzer delay
-    digitalWrite(RELAY, LOW);
+    // for now it locks back after 5 sec following LED and buzzer delay
     digitalWrite(LED_G, LOW);
     noTone(BUZZER);
+    delay(OPEN_DELAY);
+    digitalWrite(RELAY, LOW);
+    delay(1000);
+    //reset the whole function to loop
+    resetFunc();
   }
 
  //If unauthorized
@@ -77,4 +85,7 @@ void loop() {
     digitalWrite(LED_R, LOW);
     noTone(BUZZER);
   }
+  
+  mfrc522.PICC_HaltA(); // halt PICC
+  mfrc522.PCD_StopCrypto1(); // stop encryption on PCD
 }
