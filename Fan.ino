@@ -22,8 +22,7 @@ void setup() {
   //lcd screen
   lcd.init();
   lcd.backlight();
-  lcd.setCursor(0,0);
-  lcd.print("Humidity: ");
+
   //motor
   pinMode(INA,OUTPUT); 
   pinMode(INB,OUTPUT); 
