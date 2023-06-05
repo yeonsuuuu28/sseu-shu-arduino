@@ -8,9 +8,10 @@
 #define LED_R 4 //red LED pin
 #define RELAY 3 //relay pin
 #define BUZZER 2 //buzzer pin
-#define ACCESS_DELAY 500
+#define ACCESS_DELAY 1000
+#define ACCESS_DELAY2 2000
 #define DENIED_DELAY 1000
-#define OPEN_DELAY 5000
+#define OPEN_DELAY 4000
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance.
 
 void (*resetFunc)(void) = 0;
@@ -62,11 +63,11 @@ void loop() {
     digitalWrite(RELAY, HIGH);
     digitalWrite(LED_G, HIGH);
     tone(BUZZER, 330);
-    delay(ACCESS_DELAY);
-    // for now it locks back after 0.5 sec following LED and buzzer delay
-    digitalWrite(LED_G, LOW);
+    delay(ACCESS_DELAY); //1 sec
     noTone(BUZZER);
-    delay(OPEN_DELAY);
+    delay(ACCESS_DELAY2); //2 sec
+    digitalWrite(LED_G, LOW);
+    delay(OPEN_DELAY); //4 sec
     digitalWrite(RELAY, LOW);
     delay(1000);
     resetFunc();
