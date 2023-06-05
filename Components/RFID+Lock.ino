@@ -13,7 +13,6 @@
 #define OPEN_DELAY 5000
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance.
 
-//reset function
 void (*resetFunc)(void) = 0;
 
 void setup() {
@@ -64,13 +63,12 @@ void loop() {
     digitalWrite(LED_G, HIGH);
     tone(BUZZER, 330);
     delay(ACCESS_DELAY);
-    // for now it locks back after 5 sec following LED and buzzer delay
+    // for now it locks back after 0.5 sec following LED and buzzer delay
     digitalWrite(LED_G, LOW);
     noTone(BUZZER);
     delay(OPEN_DELAY);
     digitalWrite(RELAY, LOW);
     delay(1000);
-    //reset the whole function to loop
     resetFunc();
   }
 
@@ -78,11 +76,11 @@ void loop() {
  else   {
    //print message
     Serial.println("Access denied");
-    digitalWrite(LED_R, HIGH);
+    // digitalWrite(LED_R, HIGH);
     //just play buzzer and turn on red LED
     tone(BUZZER, 262);
     delay(DENIED_DELAY);
-    digitalWrite(LED_R, LOW);
+    // digitalWrite(LED_R, LOW);
     noTone(BUZZER);
   }
   
